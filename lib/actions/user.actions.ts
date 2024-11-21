@@ -45,7 +45,7 @@ export const createAccount = async ({
   email: string;
 }) => {
   const existingUser = await getUserByEmail(email);
-
+  // console.log({ existingUser });
   const accountId = await sendEmailOTP({ email });
   if (!accountId) throw new Error("Failed to send an OTP");
 
@@ -59,7 +59,7 @@ export const createAccount = async ({
       {
         fullName,
         email,
-        avatar: "https://e7.pngegg.com/pngimages/223/244/png-clipart-computer-icons-avatar-user-profile-avatar-heroes-rectangle.png",
+        avatar: "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg",
         accountId,
       },
     );

@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input"
 import Image from 'next/image'
 import Link from "next/link"
 import { createAccount, signInUser } from "@/lib/actions/user.actions"
+import OtpModal from "./OTPModal"
 
 type FormType = 'sign-in' | 'sign-up'
 
@@ -116,9 +117,9 @@ const AuthForm = ({ type }: { type: FormType }) => {
                         )}
                     </Button>
 
-                    {error && (
+                    {error &&
                         <p className="error-message">*{error}</p>
-                    )}
+                    }
 
                     <div className="body-2 flex justify-center">
                         <p className="text-light-100">
@@ -133,6 +134,9 @@ const AuthForm = ({ type }: { type: FormType }) => {
                 </form>
             </Form>
             {/* OTP verifaction */}
+            {accountId && (
+                <OtpModal email={form.getValues("email")} accountId={accountId} />
+            )}
         </>
 
     )
