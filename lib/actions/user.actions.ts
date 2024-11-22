@@ -2,10 +2,10 @@
 
 import { createAdminClient, createSessionClient } from "@/lib/appwrite";
 import { appwriteConfig } from "@/lib/appwrite/config";
-import { Query, ID } from "node-appwrite";
+import { Query, ID, Avatars } from "node-appwrite";
 import { parseStringify } from "@/lib/utils";
 import { cookies } from "next/headers";
-// import { avatarPlaceholderUrl } from "@/constants";
+import { avatarPlaceholderUrl } from "@/constants";
 import { redirect } from "next/navigation";
 
 const getUserByEmail = async (email: string) => {
@@ -48,10 +48,9 @@ export const createAccount = async ({
   // console.log({ existingUser });
   const accountId = await sendEmailOTP({ email });
   if (!accountId) throw new Error("Failed to send an OTP");
-
   if (!existingUser) {
     const { databases } = await createAdminClient();
-
+    const formattedName = fullName.trim().replace(/\s+/g, "+");
     await databases.createDocument(
       appwriteConfig.databaseId,
       appwriteConfig.usersCollectionId,
@@ -59,7 +58,7 @@ export const createAccount = async ({
       {
         fullName,
         email,
-        avatar: "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg",
+        avatar: `https://ui-avatars.com/api/?name=${formattedName}&color=fcfcfc&background=99e1d9&size=128&format=png`,
         accountId,
       },
     );

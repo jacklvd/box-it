@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { z } from 'zod'
+import { set, z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
@@ -58,9 +58,12 @@ const AuthForm = ({ type }: { type: FormType }) => {
                         email: values.email,
                     })
                     : await signInUser({ email: values.email });
-
+            // console.log({ user });
+            if (user.error === "User not found") {
+                setError("User not found. Please sign-up.");
+            }
             setAccountId(user.accountId);
-        } catch {
+        } catch (error: any) {
             setError("Failed to create account. Please try again.");
         } finally {
             setIsLoading(false);
@@ -133,7 +136,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
 
                 </form>
             </Form>
-            {/* OTP verifaction */}
+            {/* OTP verification */}
             {accountId && (
                 <OtpModal email={form.getValues("email")} accountId={accountId} />
             )}
