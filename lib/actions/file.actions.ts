@@ -9,7 +9,7 @@ import { revalidatePath } from 'next/cache'
 import { getCurrentUser } from '@/lib/actions/user.actions'
 
 const handleError = (error: unknown, message: string) => {
-  console.log(error, message)
+//   console.log(error, message)
   throw error
 }
 
@@ -31,7 +31,7 @@ export const uploadFile = async ({
     )
 
     const fileDocument = {
-      types: getFileType(bucketFile.name).type,
+      type: getFileType(bucketFile.name).type,
       name: bucketFile.name,
       url: constructFileUrl(bucketFile.$id),
       extension: getFileType(bucketFile.name).extension,
@@ -111,7 +111,7 @@ export const getFiles = async ({
       queries,
     )
 
-    console.log({ files })
+    // console.log({ files })
     return parseStringify(files)
   } catch (error) {
     handleError(error, 'Failed to get files')
