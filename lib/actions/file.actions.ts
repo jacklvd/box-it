@@ -9,7 +9,7 @@ import { revalidatePath } from 'next/cache'
 import { getCurrentUser } from '@/lib/actions/user.actions'
 
 const handleError = (error: unknown, message: string) => {
-//   console.log(error, message)
+  //   console.log(error, message)
   throw error
 }
 
@@ -199,7 +199,7 @@ export async function getTotalSpaceUsed() {
     const { databases } = await createSessionClient()
     const currentUser = await getCurrentUser()
     if (!currentUser) {
-        throw new Error("User is not authenticated.");
+      throw new Error('User is not authenticated.')
     }
 
     const files = await databases.listDocuments(
@@ -237,49 +237,47 @@ export async function getTotalSpaceUsed() {
   }
 }
 
-import { getFileTypesParams } from "@/lib/utils";
+import { getFileTypesParams } from '@/lib/utils'
 
 export async function getTotalSpaceUsedForSection(type: string) {
   try {
-    const { databases } = await createAdminClient();
-    const currentUser = await getCurrentUser();
-    if (!currentUser) throw new Error("User is not authenticated.");
+    const { databases } = await createAdminClient()
+    const currentUser = await getCurrentUser()
+    if (!currentUser) throw new Error('User is not authenticated.')
 
     // Get file types based on the section type
-    const fileTypes = getFileTypesParams(type);
+    const fileTypes = getFileTypesParams(type)
 
     // Query for files with the specified types and owner
     const files = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.filesCollectionId,
       [
-        Query.equal("owner", [currentUser.$id]), // Match the owner
-        Query.equal("type", fileTypes), // Match one of the file types
-      ]
-    );
+        Query.equal('owner', [currentUser.$id]), // Match the owner
+        Query.equal('type', fileTypes), // Match one of the file types
+      ],
+    )
     // console.log("Retrieved Files:", files.documents);
 
     // Ensure files.documents is valid
     if (!files.documents || !Array.isArray(files.documents)) {
-      throw new Error("No valid documents returned from database.");
+      throw new Error('No valid documents returned from database.')
     }
 
     // Calculate the total space used for these types
     const totalSpaceUsed = files.documents.reduce((acc, file) => {
-      const size = file.size || 0; // Safely access size
-    //   console.log(`Adding file size: ${size} (File ID: ${file.$id})`);
-      return acc + size;
-    }, 0);
+      const size = file.size || 0 // Safely access size
+      //   console.log(`Adding file size: ${size} (File ID: ${file.$id})`);
+      return acc + size
+    }, 0)
 
     return {
       used: totalSpaceUsed,
       count: files.documents.length,
-    };
+    }
   } catch (error) {
     // console.error("Error in getTotalSpaceUsedForSection:", error);
-    handleError(error, "Error calculating space for section:");
-    return { used: 0, count: 0 }; // Fallback in case of failure
+    handleError(error, 'Error calculating space for section:')
+    return { used: 0, count: 0 } // Fallback in case of failure
   }
 }
-
-  

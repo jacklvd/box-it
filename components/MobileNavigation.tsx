@@ -9,7 +9,7 @@ import {
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { Separator } from "@radix-ui/react-separator";
+import { Separator } from '@radix-ui/react-separator'
 import { navItems } from '@/constants'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'

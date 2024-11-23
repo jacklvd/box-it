@@ -2,9 +2,10 @@
 
 import { createAdminClient, createSessionClient } from '@/lib/appwrite'
 import { appwriteConfig } from '@/lib/appwrite/config'
-import { Query, ID, Avatars } from 'node-appwrite'
+import { Query, ID } from 'node-appwrite'
 import { parseStringify } from '@/lib/utils'
 import { cookies } from 'next/headers'
+import { avatarPlaceholderUrl } from '@/constants'
 import { redirect } from 'next/navigation'
 
 const getUserByEmail = async (email: string) => {
@@ -44,9 +45,10 @@ export const createAccount = async ({
   email: string
 }) => {
   const existingUser = await getUserByEmail(email)
-  // console.log({ existingUser });
+
   const accountId = await sendEmailOTP({ email })
   if (!accountId) throw new Error('Failed to send an OTP')
+
   if (!existingUser) {
     const { databases } = await createAdminClient()
     const formattedName = fullName.trim().replace(/\s+/g, '+')
