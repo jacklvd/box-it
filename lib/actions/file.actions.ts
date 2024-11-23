@@ -101,10 +101,7 @@ export const getFiles = async ({
   try {
     const currentUser = await getCurrentUser()
 
-    if (!currentUser) {
-        console.log("No current user found.");
-        return parseStringify({ total: 0, documents: [] })
-    }
+    if (!currentUser) throw new Error('User is not authenticated.')
 
     const queries = createQueries(currentUser, types, searchText, sort, limit)
 
@@ -202,8 +199,7 @@ export async function getTotalSpaceUsed() {
     const { databases } = await createSessionClient()
     const currentUser = await getCurrentUser()
     if (!currentUser) {
-        console.log("No current user found.");
-        return null
+        throw new Error("User is not authenticated.");
     }
 
     const files = await databases.listDocuments(
