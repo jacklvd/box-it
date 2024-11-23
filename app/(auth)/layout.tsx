@@ -13,6 +13,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             height={82}
             className="h-auto"
           />
+          <p className='text-white text-4xl'>Box-It</p>
           <div className="space-y-5 text-white">
             <h1 className="h1">Manage your files the best way</h1>
             <p className="body-1">
