@@ -1,6 +1,6 @@
 import React from "react";
 import Sort from "@/components/Sort";
-import { getFiles } from "@/lib/actions/file.actions";
+import { getFiles, getTotalSpaceUsedForSection } from "@/lib/actions/file.actions";
 import { Models } from "node-appwrite";
 import Card from "@/components/Card";
 import { getFileTypesParams } from "@/lib/utils";
@@ -12,7 +12,13 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
 
     const types = getFileTypesParams(type) as FileType[];
 
-    const files = await getFiles({ types, searchText, sort });
+    // Fetch files and total size for the specific section
+    const [files, sectionSpace] = await Promise.all([
+        getFiles({ types, searchText, sort }),
+        getTotalSpaceUsedForSection(type), // Calculate size for the current type
+    ]);
+    // console.log(files, sectionSpace.used);
+    const totalSizeMB = (sectionSpace?.used || 0) / (1024 * 1024); // Convert bytes to MB
 
     return (
         <div className="page-container">
@@ -21,7 +27,7 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
 
                 <div className="total-size-section">
                     <p className="body-1">
-                        Total: <span className="h5">0 MB</span>
+                        Total: <span className="h5">{totalSizeMB.toFixed(2)} MB</span>
                     </p>
 
                     <div className="sort-container">

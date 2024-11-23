@@ -31,9 +31,6 @@ export const createAdminClient = async () => {
     .setProject(appwriteConfig.projectId)
     .setKey(appwriteConfig.secretKey)
 
-  const avatar = new Avatars(client)
-
-  const result = avatar.getInitials()
   return {
     get account() {
       return new Account(client)
